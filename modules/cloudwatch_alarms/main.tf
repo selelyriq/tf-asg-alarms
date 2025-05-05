@@ -3,7 +3,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = var.cpu_evaluation_periods
   metric_name         = "CPUUtilization"
-  namespace           = var.namespace
+  namespace           = "AWS/EC2"
   period              = var.cpu_period
   statistic           = "Average"
   threshold           = var.cpu_threshold_high
@@ -11,6 +11,11 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_actions       = var.alarm_actions
   ok_actions          = var.ok_actions
   tags                = var.tags
+
+  # Treat missing data as not breaching
+  treat_missing_data = "notBreaching"
+  # Evaluate as many data points as are available
+  datapoints_to_alarm = var.cpu_datapoints_to_alarm > 0 ? var.cpu_datapoints_to_alarm : var.cpu_evaluation_periods
 
   dimensions = var.dimensions
 }
@@ -31,6 +36,9 @@ resource "aws_cloudwatch_metric_alarm" "memory_high" {
   ok_actions          = var.ok_actions
   tags                = var.tags
 
+  # Treat missing data as not breaching
+  treat_missing_data = "notBreaching"
+
   dimensions = var.dimensions
 }
 
@@ -49,6 +57,9 @@ resource "aws_cloudwatch_metric_alarm" "status_check_failed" {
   alarm_actions       = var.alarm_actions
   ok_actions          = var.ok_actions
   tags                = var.tags
+
+  # Treat missing data as breaching for status checks
+  treat_missing_data = "breaching"
 
   dimensions = var.dimensions
 }
@@ -69,6 +80,9 @@ resource "aws_cloudwatch_metric_alarm" "status_check_failed_system" {
   ok_actions          = var.ok_actions
   tags                = var.tags
 
+  # Treat missing data as breaching for status checks
+  treat_missing_data = "breaching"
+
   dimensions = var.dimensions
 }
 
@@ -87,6 +101,9 @@ resource "aws_cloudwatch_metric_alarm" "status_check_failed_instance" {
   alarm_actions       = var.alarm_actions
   ok_actions          = var.ok_actions
   tags                = var.tags
+
+  # Treat missing data as breaching for status checks
+  treat_missing_data = "breaching"
 
   dimensions = var.dimensions
 } 

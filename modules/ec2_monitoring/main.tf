@@ -13,9 +13,10 @@ module "ec2_alarms" {
   dimensions        = local.dimensions
 
   # CPU alarm settings
-  cpu_evaluation_periods = var.cpu_evaluation_periods
-  cpu_period             = var.cpu_period
-  cpu_threshold_high     = var.cpu_threshold_high
+  cpu_evaluation_periods  = var.cpu_evaluation_periods
+  cpu_datapoints_to_alarm = var.cpu_datapoints_to_alarm
+  cpu_period              = var.cpu_period
+  cpu_threshold_high      = var.cpu_threshold_high
 
   # Memory alarm settings (requires CloudWatch agent)
   create_memory_alarm       = var.create_memory_alarm

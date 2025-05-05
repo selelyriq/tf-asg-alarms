@@ -1,12 +1,21 @@
-provider "aws" {
-  region = var.aws_region
+# Query all running EC2 instances without tag filtering
+data "aws_instances" "running" {
+  filter {
+    name   = "instance-state-name"
+    values = ["running"]
+  }
+
+  # No tag filter - will monitor all running instances
 }
 
-module "ec2_auto_monitoring" {
-  source = "./modules/ec2_auto_monitoring"
+# Create monitoring for each instance
+module "ec2_instance_monitoring" {
+  source      = "../ec2_monitoring"
+  count       = length(data.aws_instances.running.ids)
+  instance_id = data.aws_instances.running.ids[count.index]
 
   # Basic configuration
-  name_prefix = var.alarm_name_prefix
+  name_prefix = var.name_prefix != "" ? "${var.name_prefix}-${count.index}" : null
 
   # CPU alarm settings
   cpu_evaluation_periods  = var.cpu_evaluation_periods
@@ -20,7 +29,7 @@ module "ec2_auto_monitoring" {
   memory_period             = var.memory_period
   memory_threshold_high     = var.memory_threshold_high
 
-  # EC2 status check alarm settings
+  # Status check alarms
   create_status_check_alarms      = var.create_status_check_alarms
   status_check_evaluation_periods = var.status_check_evaluation_periods
   status_check_period             = var.status_check_period
@@ -31,4 +40,4 @@ module "ec2_auto_monitoring" {
 
   # Tags
   tags = var.tags
-}
+} 

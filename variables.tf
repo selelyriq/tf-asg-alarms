@@ -25,7 +25,13 @@ variable "dimensions" {
 variable "cpu_evaluation_periods" {
   description = "Number of periods to evaluate for the CPU alarm"
   type        = number
-  default     = 2
+  default     = 1
+}
+
+variable "cpu_datapoints_to_alarm" {
+  description = "Number of datapoints that must be breaching to trigger the CPU alarm (if 0, uses the same value as evaluation_periods)"
+  type        = number
+  default     = 1
 }
 
 variable "cpu_period" {
@@ -35,7 +41,7 @@ variable "cpu_period" {
 }
 
 variable "cpu_threshold_high" {
-  description = "CPU utilization threshold for high alarm"
+  description = "CPU utilization threshold for high alarm (percentage, fixed at 80% if not specified)"
   type        = number
   default     = 80
 }
@@ -59,7 +65,7 @@ variable "memory_period" {
 }
 
 variable "memory_threshold_high" {
-  description = "Memory utilization threshold for high alarm"
+  description = "Memory utilization threshold for high alarm (percentage)"
   type        = number
   default     = 80
 }
