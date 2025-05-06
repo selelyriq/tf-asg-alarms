@@ -93,3 +93,4 @@ To reduce "Insufficient Data" states, the module uses a combination of:
 1. Appropriate `treat_missing_data` settings
 2. Configurable `datapoints_to_alarm` to allow for proper evaluation
 3. Default metric periods and evaluation periods optimized for each metric type
+# TF-EC2-ALARMS
