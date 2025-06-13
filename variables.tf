@@ -105,3 +105,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "instance_id" {
+  description = "Instance ID to create alarms for"
+  type        = string
+  default     = ""
+}
+
+variable "create_status_checks" {
+  description = "Whether to create status check alarms"
+  type        = bool
+  default     = true
+}

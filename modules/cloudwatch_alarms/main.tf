@@ -12,10 +12,12 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   ok_actions          = var.ok_actions
   tags                = var.tags
 
-  # Treat missing data as not breaching
+  # Important: Set missing data handling
   treat_missing_data = "notBreaching"
-  # Evaluate as many data points as are available
-  datapoints_to_alarm = var.cpu_datapoints_to_alarm > 0 ? var.cpu_datapoints_to_alarm : var.cpu_evaluation_periods
+  # Set a minimum evaluation period to avoid insufficient data
+  datapoints_to_alarm = 1  # Trigger after a single datapoint exceeds threshold
+  # Evaluate a longer period if needed
+  extended_statistic  = null  # Use basic statistic instead
 
   dimensions = var.dimensions
 }
