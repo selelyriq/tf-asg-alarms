@@ -5,8 +5,8 @@ provider "aws" {
 module "ec2_auto_monitoring" {
   source = "./modules/ec2_auto_monitoring"
 
-  # Basic configuration
-  name_prefix = var.alarm_name_prefix
+    # Basic configuration
+    alarm_name_prefix = var.alarm_name_prefix
 
   # CPU alarm settings
   cpu_evaluation_periods  = var.cpu_evaluation_periods

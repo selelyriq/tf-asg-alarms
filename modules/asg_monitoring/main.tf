@@ -8,7 +8,7 @@ module "asg_alarms" {
   source = "../cloudwatch_alarms"
 
   # Basic configuration
-  alarm_name_prefix = var.name_prefix != "" ? var.name_prefix : "asg-${var.autoscaling_group_name}"
+  alarm_name_prefix = var.alarm_name_prefix != "" ? var.alarm_name_prefix : "asg-${var.autoscaling_group_name}"
   namespace         = "AWS/AutoScaling"
   dimensions        = local.dimensions
 

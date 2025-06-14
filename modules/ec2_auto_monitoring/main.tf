@@ -9,7 +9,7 @@ module "asg_monitoring" {
   autoscaling_group_name = data.aws_autoscaling_groups.all.names[count.index]
 
   # Basic configuration
-  name_prefix = var.name_prefix != "" ? "${var.name_prefix}-${data.aws_autoscaling_groups.all.names[count.index]}" : null
+  alarm_name_prefix = var.alarm_name_prefix != "" ? "${var.alarm_name_prefix}-${data.aws_autoscaling_groups.all.names[count.index]}" : null
 
   # CPU alarm settings
   cpu_evaluation_periods  = var.cpu_evaluation_periods

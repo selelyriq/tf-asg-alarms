@@ -41,16 +41,13 @@ resource "aws_sns_topic_subscription" "email_alerts" {
 module "ec2_auto_monitoring" {
   source = "../../modules/ec2_auto_monitoring"
 
-  name_prefix = "prod"
+  alarm_name_prefix = "prod"
 
   # CPU alarm configuration - hard threshold at 80%
   cpu_threshold_high      = 80
   cpu_evaluation_periods  = 3
   cpu_datapoints_to_alarm = 2  # Only need 2 out of 3 datapoints to trigger
   cpu_period              = 60 # 1 minute
-
-  # Status check alarms (enabled by default)
-  create_status_check_alarms = true
 
   # Memory monitoring (requires CloudWatch agent on the instances)
   create_memory_alarm = false # Set to true if CloudWatch agent is installed

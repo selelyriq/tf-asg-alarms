@@ -15,5 +15,5 @@ output "autoscaling_group_name" {
 
 output "alarm_name_prefix" {
   description = "Prefix used for alarm names"
-  value       = var.name_prefix != "" ? var.name_prefix : "asg-${var.autoscaling_group_name}"
+  value       = var.alarm_name_prefix != "" ? var.alarm_name_prefix : "asg-${var.autoscaling_group_name}"
 } 

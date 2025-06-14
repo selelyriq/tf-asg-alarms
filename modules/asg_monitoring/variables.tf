@@ -3,7 +3,7 @@ variable "autoscaling_group_name" {
   type        = string
 }
 
-variable "name_prefix" {
+variable "alarm_name_prefix" {
   description = "Prefix for alarm names"
   type        = string
   default     = ""
