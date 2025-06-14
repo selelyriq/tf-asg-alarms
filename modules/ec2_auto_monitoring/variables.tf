@@ -52,23 +52,8 @@ variable "memory_threshold_high" {
   default     = 80
 }
 
-variable "create_status_check_alarms" {
-  description = "Whether to create EC2 status check alarms"
-  type        = bool
-  default     = true
-}
-
-variable "status_check_evaluation_periods" {
-  description = "Number of periods to evaluate for status check alarms"
-  type        = number
-  default     = 1
-}
-
-variable "status_check_period" {
-  description = "Period in seconds for status check alarm evaluation"
-  type        = number
-  default     = 60
-}
+# Status check alarms are not applicable to Auto Scaling Groups
+# as they operate at the group level rather than individual instance level
 
 variable "alarm_actions" {
   description = "List of ARNs to notify when alarm transitions to ALARM state"

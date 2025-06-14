@@ -1,17 +1,18 @@
-# Query all Auto Scaling Groups
-data "aws_autoscaling_groups" "all" {}
+locals {
+  dimensions = {
+    AutoScalingGroupName = var.autoscaling_group_name
+  }
+}
 
-# Create monitoring for each autoscaling group
-module "asg_monitoring" {
-  source = "../asg_monitoring"
-  count  = length(data.aws_autoscaling_groups.all.names)
-
-  autoscaling_group_name = data.aws_autoscaling_groups.all.names[count.index]
+module "asg_alarms" {
+  source = "../cloudwatch_alarms"
 
   # Basic configuration
-  name_prefix = var.name_prefix != "" ? "${var.name_prefix}-${data.aws_autoscaling_groups.all.names[count.index]}" : null
+  alarm_name_prefix = var.name_prefix != "" ? var.name_prefix : "asg-${var.autoscaling_group_name}"
+  namespace         = "AWS/AutoScaling"
+  dimensions        = local.dimensions
 
-  # CPU alarm settings
+  # CPU alarm settings - using GroupAverageCPUUtilization for ASG
   cpu_evaluation_periods  = var.cpu_evaluation_periods
   cpu_datapoints_to_alarm = var.cpu_datapoints_to_alarm
   cpu_period              = var.cpu_period
@@ -23,10 +24,18 @@ module "asg_monitoring" {
   memory_period             = var.memory_period
   memory_threshold_high     = var.memory_threshold_high
 
+  # Skip status check alarms for ASG (not applicable)
+  create_status_check_alarms = false
+
   # Actions
   alarm_actions = var.alarm_actions
   ok_actions    = var.ok_actions
 
   # Tags
-  tags = var.tags
+  tags = merge(
+    var.tags,
+    {
+      AutoScalingGroup = var.autoscaling_group_name
+    }
+  )
 } 

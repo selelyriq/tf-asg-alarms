@@ -1,37 +1,24 @@
-variable "aws_region" {
-  description = "AWS region where resources will be created"
+variable "autoscaling_group_name" {
+  description = "Name of the Auto Scaling Group to monitor"
   type        = string
-  default     = "us-east-1"
 }
 
-variable "alarm_name_prefix" {
-  description = "Prefix for CloudWatch alarm names"
+variable "name_prefix" {
+  description = "Prefix for alarm names"
   type        = string
-  default     = "cw-alarm"
-}
-
-variable "namespace" {
-  description = "CloudWatch namespace for the alarms"
-  type        = string
-  default     = "AWS/EC2"
-}
-
-variable "dimensions" {
-  description = "Dimensions for the alarm"
-  type        = map(string)
-  default     = {}
+  default     = ""
 }
 
 variable "cpu_evaluation_periods" {
   description = "Number of periods to evaluate for the CPU alarm"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "cpu_datapoints_to_alarm" {
   description = "Number of datapoints that must be breaching to trigger the CPU alarm (if 0, uses the same value as evaluation_periods)"
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "cpu_period" {
@@ -41,13 +28,13 @@ variable "cpu_period" {
 }
 
 variable "cpu_threshold_high" {
-  description = "CPU utilization threshold for high alarm (percentage, fixed at 80% if not specified)"
+  description = "CPU utilization threshold for high alarm (percentage)"
   type        = number
   default     = 80
 }
 
 variable "create_memory_alarm" {
-  description = "Whether to create memory utilization alarm"
+  description = "Whether to create memory utilization alarm (requires CloudWatch agent)"
   type        = bool
   default     = false
 }
@@ -70,9 +57,6 @@ variable "memory_threshold_high" {
   default     = 80
 }
 
-# Status check alarms are not applicable to Auto Scaling Groups
-# as they operate at the group level rather than individual instance level
-
 variable "alarm_actions" {
   description = "List of ARNs to notify when alarm transitions to ALARM state"
   type        = list(string)
@@ -89,4 +73,4 @@ variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
   default     = {}
-}
+} 

@@ -2,22 +2,22 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name          = "${var.alarm_name_prefix}-cpu-utilization-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = var.cpu_evaluation_periods
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/EC2"
+  metric_name         = var.namespace == "AWS/AutoScaling" ? "GroupAverageCPUUtilization" : "CPUUtilization"
+  namespace           = var.namespace
   period              = var.cpu_period
   statistic           = "Average"
   threshold           = var.cpu_threshold_high
-  alarm_description   = "This metric monitors high CPU utilization"
+  alarm_description   = var.namespace == "AWS/AutoScaling" ? "This metric monitors Auto Scaling Group average CPU utilization" : "This metric monitors high CPU utilization"
   alarm_actions       = var.alarm_actions
   ok_actions          = var.ok_actions
   tags                = var.tags
 
   # Important: Set missing data handling
   treat_missing_data = "notBreaching"
-  # Set a minimum evaluation period to avoid insufficient data
-  datapoints_to_alarm = 1  # Trigger after a single datapoint exceeds threshold
-  # Evaluate a longer period if needed
-  extended_statistic  = null  # Use basic statistic instead
+  # Set datapoints to alarm - use variable if provided, otherwise default to 1
+  datapoints_to_alarm = var.cpu_datapoints_to_alarm > 0 ? var.cpu_datapoints_to_alarm : 1
+  # Use basic statistic
+  extended_statistic = null
 
   dimensions = var.dimensions
 }
@@ -28,12 +28,12 @@ resource "aws_cloudwatch_metric_alarm" "memory_high" {
   alarm_name          = "${var.alarm_name_prefix}-memory-utilization-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = var.memory_evaluation_periods
-  metric_name         = "MemoryUtilization"
+  metric_name         = var.namespace == "AWS/AutoScaling" ? "GroupAverageMemoryUtilization" : "MemoryUtilization"
   namespace           = var.namespace
   period              = var.memory_period
   statistic           = "Average"
   threshold           = var.memory_threshold_high
-  alarm_description   = "This metric monitors high memory utilization"
+  alarm_description   = var.namespace == "AWS/AutoScaling" ? "This metric monitors Auto Scaling Group average memory utilization" : "This metric monitors high memory utilization"
   alarm_actions       = var.alarm_actions
   ok_actions          = var.ok_actions
   tags                = var.tags
