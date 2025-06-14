@@ -110,3 +110,4 @@ To reduce "Insufficient Data" states, the module uses:
 
 - **CPU**: `GroupAverageCPUUtilization` from `AWS/AutoScaling` namespace
 - **Memory**: `GroupAverageMemoryUtilization` from `AWS/AutoScaling` namespace (requires CloudWatch agent)
+# tf-asg-alarms
